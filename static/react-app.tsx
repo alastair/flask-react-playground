@@ -2,13 +2,13 @@ import * as ReactDOM from "react-dom";
 import * as React from "react";
 import {Data, DataResponse} from "./schema/DataResponse";
 
-type AppProps = {
+interface AppProps extends React.Props<App> {
   current_page: number;
   total_pages: number;
   items: DataResponse;
 };
 
-type AppState  = {
+interface AppState {
   page: number;
   totalPages: number;
   data: Data;
