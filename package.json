@@ -5,7 +5,8 @@
   "main": "static/react-app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "json2ts": "json2ts"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "homepage": "https://github.com/alastair/flask-react-playground#readme",
   "dependencies": {
     "core-js": "^3.6.5",
+    "json-schema-to-typescript": "^9.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "regenerator-runtime": "^0.13.5"

@@ -1,5 +1,6 @@
 import json
 import math
+from typing import List
 
 import pydantic as pydantic
 from flask import Flask, request, render_template, jsonify
@@ -8,9 +9,28 @@ from flask import Flask, request, render_template, jsonify
 app = Flask(__name__)
 
 
+def makeRegistry():
+    registry = {}
+
+    def registrar(func):
+        registry[func.__name__] = func
+        return func  # normally a decorator returns a wrapped function,
+                     # but here we return func unmodified, after registering it
+    registrar.all = registry
+    return registrar
+
+
+exported_model = makeRegistry()
+
+
 class DataRow(pydantic.BaseModel):
     id: int
     name: str
+
+
+@exported_model
+class DataResponse(pydantic.BaseModel):
+    data: List[DataRow]
 
 
 # This is some dummy data, returned by the db module
@@ -38,7 +58,8 @@ def load_data(page):
     assert page > 0
     items_per_page = 4
     # we number pages from 1, so remove 1 from it to start from beginning of the list
-    return database[(page-1)*items_per_page:page*items_per_page]
+    data = database[(page-1)*items_per_page:page*items_per_page]
+    return DataResponse(data=data)
 
 
 def get_total_pages():
@@ -83,7 +104,7 @@ def react():
     total_pages = get_total_pages()
     data = {"current_page": page,
             "total_pages": total_pages,
-            "items": [row.dict() for row in items]}
+            "items": items.dict()}
     context = {"props": json.dumps(data)}
 
     return render_template('react.html', **context)
@@ -92,7 +113,12 @@ def react():
 @app.route('/api/data')
 def api_data():
     page = get_page_arg()
-    return jsonify([row.dict() for row in load_data(page)])
+    return jsonify(load_data(page).dict())
+
+
+@app.route('/api/data.schema')
+def api_data_schema():
+    return jsonify(DataResponse.schema())
 
 
 if __name__ == '__main__':
