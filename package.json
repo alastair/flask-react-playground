@@ -1,0 +1,23 @@
+{
+  "name": "flask-react-playground",
+  "version": "1.0.0",
+  "description": "Working out how to integrate a react app with a flask backend",
+  "main": "static/react-app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alastair/flask-react-playground.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alastair/flask-react-playground/issues"
+  },
+  "homepage": "https://github.com/alastair/flask-react-playground#readme",
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
