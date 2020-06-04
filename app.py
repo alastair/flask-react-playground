@@ -57,6 +57,7 @@ def get_page_arg():
 
 @app.route('/')
 def main():
+    """Load the main page in html"""
     page = get_page_arg()
 
     items = load_data(page)
@@ -66,6 +67,12 @@ def main():
                "items": items}
 
     return render_template('index.html', **context)
+
+
+@app.route('/react')
+def react():
+    """Load the main page in react"""
+    return render_template('react.html')
 
 
 @app.route('/api/data')
