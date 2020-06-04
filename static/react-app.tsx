@@ -1,14 +1,27 @@
 import * as ReactDOM from "react-dom";
-import React from "react";
+import * as React from "react";
+import {Data, DataResponse} from "./schema/DataResponse";
 
-export default class App extends React.Component {
+type AppProps = {
+  current_page: number;
+  total_pages: number;
+  items: DataResponse;
+};
+
+type AppState  = {
+  page: number;
+  totalPages: number;
+  data: Data;
+};
+
+export default class App extends React.Component<AppProps, AppState> {
   
-  constructor(props) {
+  constructor(props:AppProps) {
     super(props);
     this.state = {
       page: props.current_page || 0,
       totalPages: props.total_pages,
-      data: props.items || []
+      data: props.items && props.items.data || []
     };
   }
   
@@ -71,7 +84,7 @@ export default class App extends React.Component {
     window.history.back();
   }
   
-  getData = async (page) => {
+  getData = async (page): Promise<Data> => {
     //Call an api on the server to get data
     let query = `/api/data?page=${page}`;
     
@@ -82,9 +95,9 @@ export default class App extends React.Component {
       console.error("Failed API call");
       return;
     }
-    const result = await response.json();
+    const result:DataResponse = await response.json();
     
-    return result;
+    return result.data;
   }
   
   render() {
