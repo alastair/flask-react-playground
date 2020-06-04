@@ -5,13 +5,19 @@ export default class App extends React.Component {
   
   constructor(props) {
     super(props);
-    this.state = { page: props.page || 0, data: props.data || "" };
+    this.state = {
+      page: props.current_page || 0,
+      totalPages: props.total_pages,
+      data: props.items || []
+    };
   }
   
   componentDidMount() {
     window.onpopstate = this.syncStateWithURL;
     // In case the page was loaded with url params
-    this.syncStateWithURL();
+    if(!this.state.data || !this.state.data.length){
+      this.syncStateWithURL();
+    }
   }
   
   componentWillUnmount() {
@@ -82,23 +88,27 @@ export default class App extends React.Component {
   }
   
   render() {
+    const {page, totalPages} = this.state;
     const dataToDisplay = this.state.data && this.state.data.length
       && this.state.data.map(datum => (<div key={datum.id}>{datum.name}</div>));
+    const prevEnabled = page>1;
+    const nextEnabled = page+1 <= totalPages;
+      
     return (
       <div>
         <h1>Testing integration between Flask and React</h1>
         <div>
           Load prev/next page data (API call)
-          <button onClick={this.decrementURLParam}>Prev</button>
-          <button onClick={this.incrementURLParam}>Next</button>
+          <button disabled={!prevEnabled} onClick={this.decrementURLParam}>Prev</button>
+          <button disabled={!nextEnabled} onClick={this.incrementURLParam}>Next</button>
         </div>
         <div>
           Navigate to prev/next page (reloads the page)
-          <a href={`?page=${Math.max(0, this.state.page - 1)}`}>Prev page (link)</a>
-          <a href={`?page=${this.state.page+1}`}>Next page (link)</a>
+          {prevEnabled && <a href={`?page=${Math.max(0, page - 1)}`}>Prev page (link)</a>}
+          {nextEnabled && <a href={`?page=${page+1}`}>Next page (link)</a>}
         </div>
         <button onClick={this.goBack}>= browser back button)</button>
-        <p>Current page: {this.state.page}</p>
+        <p>Current page: {page}</p>
         <p>Data: {dataToDisplay}</p>
       </div>
     );
