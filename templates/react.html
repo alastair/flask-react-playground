@@ -1,10 +1,7 @@
 <html>
 <body>
 <div id="react-container"></div>
-<div id="react-props"></div>
 </body>
+<script id="react-props" type="application/json">{{ props|safe }}</script>
 <script src="{{url_for('static', filename='react-app.js')}}"></script>
-<script>
-    document.getElementById('react-props').innerText = x;
-</script>
 </html>

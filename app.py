@@ -1,13 +1,17 @@
+import json
 import math
 
 import pydantic as pydantic
 from flask import Flask, request, render_template, jsonify
 
+
 app = Flask(__name__)
+
 
 class DataRow(pydantic.BaseModel):
     id: int
     name: str
+
 
 # This is some dummy data, returned by the db module
 database = [
@@ -72,7 +76,17 @@ def main():
 @app.route('/react')
 def react():
     """Load the main page in react"""
-    return render_template('react.html')
+
+    page = get_page_arg()
+
+    items = load_data(page)
+    total_pages = get_total_pages()
+    data = {"current_page": page,
+            "total_pages": total_pages,
+            "items": [row.dict() for row in items]}
+    context = {"props": json.dumps(data)}
+
+    return render_template('react.html', **context)
 
 
 @app.route('/api/data')
