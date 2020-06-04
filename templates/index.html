@@ -1,0 +1,13 @@
+<h1>items</h1>
+
+{% for i in items %}
+ <li>{{ i.id }}: {{ i.name }}</li>
+{% endfor %}
+
+<hr>
+
+{% if current_page == 1 %}back{% else %}<a href="?page={{ current_page-1 }}">back</a>{% endif %}
+
+<hr>
+
+{% if current_page >= total_pages %}forward{% else %}<a href="?page={{ current_page+1 }}">forward</a>{% endif %}
