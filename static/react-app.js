@@ -67,7 +67,7 @@ export default class App extends React.Component {
   
   getData = async (page) => {
 	//Call an api on the server to get data
-	let query = `localhost:XXX/api/data/${page}`;
+	let query = `/api/data/${page}`;
 
     const response = await fetch(query, {
       method: "GET",
