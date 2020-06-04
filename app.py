@@ -2,9 +2,9 @@ import json
 import math
 from typing import List
 
-import pydantic as pydantic
+import pydantic
 from flask import Flask, request, render_template, jsonify
-
+from pydantic import Field
 
 app = Flask(__name__)
 
@@ -24,12 +24,14 @@ exported_model = makeRegistry()
 
 
 class DataRow(pydantic.BaseModel):
-    id: int
-    name: str
+    """a row of data"""
+    id: int = Field(description="the id of the data")
+    name: str = Field(description="the name of your favourite band")
 
 
 @exported_model
 class DataResponse(pydantic.BaseModel):
+    """The response of the /data api call"""
     data: List[DataRow]
 
 
