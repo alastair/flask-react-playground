@@ -55,7 +55,7 @@ database = [
 ]
 
 
-def load_data(page):
+def load_data(page: int) -> DataResponse:
     """Load a page of data from the database. This is a "db" method"""
     assert page > 0
     items_per_page = 4
@@ -64,13 +64,13 @@ def load_data(page):
     return DataResponse(data=data)
 
 
-def get_total_pages():
+def get_total_pages() -> int:
     """Get the number of pages can be shown. This is a "db" method"""
     items_per_page = 4
     return math.ceil(len(database)/items_per_page)
 
 
-def get_page_arg():
+def get_page_arg() -> int:
     """read the ?page argument, and return it as an integer.
     Return 1 if no page argument is set, or if it's not a valid
     integer"""
