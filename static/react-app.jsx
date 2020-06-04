@@ -67,17 +67,23 @@ export default class App extends React.Component {
   
   getData = async (page) => {
     //Call an api on the server to get data
-    let query = `/api/data/${page}`;
+    let query = `/api/data?page=${page}`;
     
     const response = await fetch(query, {
       method: "GET",
     });
+    if(!response.ok) {
+      console.error("Failed API call");
+      return;
+    }
     const result = await response.json();
     
     return result;
   }
   
   render() {
+    const dataToDisplay = this.state.data && this.state.data.length
+      && this.state.data.map(datum => (<div key={datum.id}>{datum.name}</div>));
     return (
       <div>
         <h1>Testing integration between Flask and React</h1>
@@ -88,12 +94,12 @@ export default class App extends React.Component {
         </div>
         <div>
           Navigate to prev/next page (reloads the page)
-          <a href={`/?page=${Math.max(0, this.state.page - 1)}`}>Prev page (link)</a>
-          <a href={`/?page=${this.state.page+1}`}>Next page (link)</a>
+          <a href={`?page=${Math.max(0, this.state.page - 1)}`}>Prev page (link)</a>
+          <a href={`?page=${this.state.page+1}`}>Next page (link)</a>
         </div>
         <button onClick={this.goBack}>= browser back button)</button>
         <p>Current page: {this.state.page}</p>
-        <p>Data: {this.state.data}</p>
+        <p>Data: {dataToDisplay}</p>
       </div>
     );
   }
